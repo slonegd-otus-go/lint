@@ -6,17 +6,12 @@ import (
 	"go/parser"
 	"go/token"
 	"log"
-	"os"
 )
 
 func main() {
-	src, err := os.Open("struct.go")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
 	fileset := token.NewFileSet()
-	file, err := parser.ParseFile(fileset, "demo", src, parser.ParseComments)
+	// для работы с пакетом ast
+	file, err := parser.ParseFile(fileset, "struct.go", nil, 0)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
