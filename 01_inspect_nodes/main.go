@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -26,13 +25,20 @@ func main() {
 		if !ok {
 			return true
 		}
-
 		log.Printf("got struct name: %s", spec.Name.Name)
 
+		beginLine := fileset.Position(structType.Pos()).Line
+		endLine := fileset.Position(structType.End()).Line
+		log.Printf("got begin line: %d, end line: %d", beginLine, endLine)
+
+		beginOffset := fileset.Position(structType.Pos()).Offset
+		endOffset := fileset.Position(structType.End()).Offset
+		log.Printf("got begin offset: %d, end offset: %d", beginOffset, endOffset)
+
 		for _, field := range structType.Fields.List {
-			fmt.Printf("Field: %s\n", field.Names[0].Name)
+			log.Printf("Field: %s", field.Names[0].Name)
 			if field.Tag != nil {
-				fmt.Printf("Tag:   %s\n", field.Tag.Value)
+				log.Printf("Tag:   %s", field.Tag.Value)
 			}
 		}
 		return true
