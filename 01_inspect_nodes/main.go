@@ -19,17 +19,21 @@ func main() {
 	}
 
 	ast.Inspect(file, func(node ast.Node) bool {
+		// получаем спецификацию ноды (в спецификации лежит имя)
 		spec, ok := node.(*ast.TypeSpec)
 		if !ok {
 			return true
 		}
 
+		// определяем является ли нода имено структурой
 		structType, ok := spec.Type.(*ast.StructType)
 		if !ok {
 			return true
 		}
 		log.Printf("got struct name: %s", spec.Name.Name)
 
+		// определение позиции структуры в файле
+		// для этого необходим *token.FileSet, поскольку он предоставляет такую детальную информацию
 		beginLine := fileset.Position(structType.Pos()).Line
 		endLine := fileset.Position(structType.End()).Line
 		log.Printf("got begin line: %d, end line: %d", beginLine, endLine)
