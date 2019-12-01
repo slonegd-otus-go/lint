@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"go/ast"
+	"go/format"
 	"go/parser"
 	"go/token"
 	"log"
+	"os"
 )
 
 func main() {
@@ -37,8 +39,15 @@ func main() {
 		log.Printf("got begin offset: %d, end offset: %d", beginOffset, endOffset)
 
 		logFieldTag(structType)
+		addTags(structType)
 		return true
 	})
+
+	// вывод изменённого ast
+	err = format.Node(os.Stdout, fileset, file)
+	if err != nil {
+		log.Printf("format file failed: %s", err)
+	}
 }
 
 func logFieldTag(structType *ast.StructType) {
@@ -48,5 +57,16 @@ func logFieldTag(structType *ast.StructType) {
 			message = fmt.Sprintf("%s, Tag: %s", message, field.Tag.Value)
 		}
 		log.Print(message)
+	}
+}
+
+func addTags(structType *ast.StructType) {
+	for _, field := range structType.Fields.List {
+		if field.Tag != nil {
+			continue
+		}
+
+		field.Tag = &ast.BasicLit{}
+		field.Tag.Value = fmt.Sprintf("`newtag:\"%s\"", field.Names[0].Name)
 	}
 }
