@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -35,12 +36,17 @@ func main() {
 		endOffset := fileset.Position(structType.End()).Offset
 		log.Printf("got begin offset: %d, end offset: %d", beginOffset, endOffset)
 
-		for _, field := range structType.Fields.List {
-			log.Printf("Field: %s", field.Names[0].Name)
-			if field.Tag != nil {
-				log.Printf("Tag:   %s", field.Tag.Value)
-			}
-		}
+		logFieldTag(structType)
 		return true
 	})
+}
+
+func logFieldTag(structType *ast.StructType) {
+	for _, field := range structType.Fields.List {
+		message := fmt.Sprintf("Field: %s", field.Names[0].Name)
+		if field.Tag != nil {
+			message = fmt.Sprintf("%s, Tag: %s", message, field.Tag.Value)
+		}
+		log.Print(message)
+	}
 }
