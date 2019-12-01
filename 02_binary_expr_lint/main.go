@@ -31,11 +31,17 @@ func main() {
 			return true
 		}
 
-		if _, ok := binaryExpr.X.(*ast.BasicLit); !ok {
+		x, ok := binaryExpr.X.(*ast.BasicLit)
+		if !ok {
 			return true
 		}
 
-		if _, ok := binaryExpr.Y.(*ast.BasicLit); !ok {
+		y, ok := binaryExpr.Y.(*ast.BasicLit)
+		if !ok {
+			return true
+		}
+
+		if x.Kind != token.INT || y.Kind != token.INT {
 			return true
 		}
 
