@@ -16,11 +16,18 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	ast.Inspect(file, func(x ast.Node) bool {
-		structType, ok := x.(*ast.StructType)
+	ast.Inspect(file, func(node ast.Node) bool {
+		spec, ok := node.(*ast.TypeSpec)
 		if !ok {
 			return true
 		}
+
+		structType, ok := spec.Type.(*ast.StructType)
+		if !ok {
+			return true
+		}
+
+		log.Printf("got struct name: %s", spec.Name.Name)
 
 		for _, field := range structType.Fields.List {
 			fmt.Printf("Field: %s\n", field.Names[0].Name)

@@ -10,3 +10,6 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# manual added
+01_inspect_nodes/01_inspect_nodes
