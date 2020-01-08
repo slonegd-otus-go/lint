@@ -16,3 +16,4 @@
 02_binary_expr_lint/main
 03_analisys/main
 04_inspector/main
+05_nil_slices/main
